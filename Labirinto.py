@@ -141,26 +141,120 @@ class Environment:
                     self.matrix[line][column] = 'ROBOT'
 
 
-    def printState(self):
+    def printState(self, robot):
+        r = 0
+        c = 0
+        print("    ")
+        for i in range(0, n_cols):
+            print(str(i))
+
+        print("\n")
+        print("    ")
+        for i in range(0, n_cols):
+            print("+---")
+        print("+\n")
+        for r in range(0, n_rows):
+            print(str(r))
+            for c in range(0, n_cols):
+                if self.matrix[r][c] == 'WALL':
+                    print( "|***" )
+                if self.matrix[r][c] == 'TARGET':
+                    print( "| X " )
+                if self.matrix[r][c] == 'EMPTY':
+                    print( "|   " )
+                if self.matrix[r][c] == 'ROBOT':
+                    if robot.facing == 'NORTH':
+                        print("| ^ ")
+                    elif robot.facing == 'NORTHEAST':
+                        print("| / ")
+                    elif robot.facing == 'EAST':
+                        print("| > ")
+                    elif robot.facing == 'SOUTHEAST':
+                        print("| \\ ")
+                    elif robot.facing == 'SOUTH':
+                        print("| v ")
+                    elif robot.facing == 'SOUTHWEST':
+                        print("| %% ")
+                    elif robot.facing == 'WEST':
+                        print("| < ")
+                    elif robot.facing == 'NORTHWEST':
+                        print("| # ")
+
+            print( "|\n" )
+            print("    ")
+            for i in range(0, n_cols):
+                print("+---")
+                print("+\n")
+
+        robot.print_state()
 
 
+    def moveRobot(self, direction, robot):
+        if (direction == 'NORTH') and (robot.facing == 'NORTH') and (robot.matrix[robot.locX - 1][robot.locY] != 'WALL') and (robot.locX > 0) :
+            robot.matrix[robot.locX][robot.locY] = 'EMPTY'
+            robot.matrix[robot.locX - 1][robot.locY] = 'ROBOT'
+            robot.move('NORTH')
+        elif (direction == 'NORTHWEST') and (robot.facing == 'NORTHWEST') and (robot.matrix[robot.locX - 1][robot.locY - 1] != 'WALL') \
+              and (robot.locX > 0) and (robot.locY > 0):
+            robot.matrix[robot.locX][robot.locY] = 'EMPTY';
+                Matrix[Rob1.getX() - 1][Rob1.getY() - 1] = ROBOT;
+                Rob1.move(NORTHWEST);
+                }
+            else
+                if ((direction == SOUTH) & & (Rob1.getFacing() == SOUTH) & & (
+                        Matrix[Rob1.getX() + 1][Rob1.getY()] != WALL) & & (Rob1.getX() < n_rows - 1))
+                    {
+                        Matrix[Rob1.getX()][Rob1.getY()] = NONE;
+                    Matrix[Rob1.getX() + 1][Rob1.getY()] = ROBOT;
+                    Rob1.move(SOUTH);
+                    }
+                    else
+                    if ((direction == SOUTHEAST) & & (Rob1.getFacing() == SOUTHEAST) & & (
+                            Matrix[Rob1.getX() + 1][Rob1.getY() + 1] != WALL) & & (Rob1.getX() < n_rows - 1) & & (
+                            Rob1.getY() < n_cols - 1))
+                        {
+                            Matrix[Rob1.getX()][Rob1.getY()] = NONE;
+                        Matrix[Rob1.getX() + 1][Rob1.getY() + 1] = ROBOT;
+                        Rob1.move(SOUTHEAST);
+                        }
+                        else
+                        if ((direction == EAST) & & (Rob1.getFacing() == EAST) & & (
+                                Matrix[Rob1.getX()][Rob1.getY() + 1] != WALL) & & (Rob1.getY() < n_cols - 1))
+                            {
+                                Matrix[Rob1.getX()][Rob1.getY()] = NONE;
+                            Matrix[Rob1.getX()][Rob1.getY() + 1] = ROBOT;
+                            Rob1.move(EAST);
+                            }
+                            else
+                            if ((direction == SOUTHWEST) & & (Rob1.getFacing() == SOUTHWEST) & & (
+                                    Matrix[Rob1.getX() + 1][Rob1.getY() - 1] != WALL) & & (
+                                    Rob1.getX() < n_rows - 1) & & (Rob1.getY() > 0))
+                                {
+                                    Matrix[Rob1.getX()][Rob1.getY()] = NONE;
+                                Matrix[Rob1.getX() + 1][Rob1.getY() - 1] = ROBOT;
+                                Rob1.move(SOUTHWEST);
+                                }
+                                else
+                                if ((direction == WEST) & & (Rob1.getFacing() == WEST) & & (
+                                        Matrix[Rob1.getX()][Rob1.getY() - 1] != WALL) & & (Rob1.getY() > 0))
+                                    {
+                                        Matrix[Rob1.getX()][Rob1.getY()] = NONE;
+                                    Matrix[Rob1.getX()][Rob1.getY() - 1] = ROBOT;
+                                    Rob1.move(WEST);
+                                    }
+                                    else
+                                    if ((direction == NORTHEAST) & & (Rob1.getFacing() == NORTHEAST) & & (
+                                            Matrix[Rob1.getX() - 1][Rob1.getY() + 1] != WALL) & & (
+                                            Rob1.getX() > 0) & & (Rob1.getY() < n_cols - 1))
+                                        {
+                                            Matrix[Rob1.getX()][Rob1.getY()] = NONE;
+                                        Matrix[Rob1.getX() - 1][Rob1.getY() + 1] = ROBOT;
+                                        Rob1.move(NORTHEAST);
+                                        }
 
+                                        }
 
-
-
-grafo = nx.Graph()
-grafo.add_node(0, position=[0, 0])
-# penso que cada nó pode representar um estado
-
-for line in range(size_x):
-    for column in range(size_y):
-        index = 0
-        if column == 0:                         # vazio
-            grafo.add_edge(index, index+1, custo=1)
-        elif column == 1:
-            print("blablabla")
-
-'''
+                                        '''
     Instancia todas as possíveis configurações - 0 em todas as posições da matriz e todas as permutações
     Adiciona todas essas instâncias como nós
     Adiciona aresta entre as entidades que possuem o 0 em posições i+1, j-1,j+1 ou i-1 com relação ao nó atual
