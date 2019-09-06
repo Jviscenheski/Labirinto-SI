@@ -89,9 +89,8 @@ class Environment:
 
         for line in lineList:
             for char in line:
-                if char == ">":
-                    self.matrix[lineIndex][columnIndex] = 'ROBOT'
-                elif char == ".":
+
+                if char == ".":
                     self.matrix[lineIndex][columnIndex] = 'EMPTY'
                 elif char == "*":
                     self.matrix[lineIndex][columnIndex] = 'WALL'
@@ -103,17 +102,21 @@ class Environment:
                     self.matrix[lineIndex][columnIndex] = 'ROBOT'
                     robot.setLocation(lineIndex, columnIndex)
                     robot.facing = 'WEST'
-                elif char == "x":
-                    self.matrix[lineIndex][columnIndex] = 'TARGET'
                 elif char == "v":
                     self.matrix[lineIndex][columnIndex] = 'ROBOT'
                     robot.setLocation(lineIndex, columnIndex)
                     robot.facing = 'SOUTH'
+                elif char == ">":
+                    self.matrix[lineIndex][columnIndex] = 'ROBOT'
+                    robot.setLocation(lineIndex, columnIndex)
+                    robot.facing = 'EAST'
+                elif char == "x":
+                    self.matrix[lineIndex][columnIndex] = 'TARGET'
+
 
                 columnIndex = columnIndex + 1
             columnIndex = 0
             lineIndex = lineIndex + 1
-
 
     def scanState(self):
         # recolhe número de linhas
@@ -140,8 +143,9 @@ class Environment:
                 elif char == "v":
                     self.matrix[line][column] = 'ROBOT'
 
-
     def printState(self, robot):
+        n_cols = 20 #??
+        n_rows = 20 #??
         r = 0
         c = 0
         print("    ")
@@ -188,73 +192,51 @@ class Environment:
 
         robot.print_state()
 
-
     def moveRobot(self, direction, robot):
-        if (direction == 'NORTH') and (robot.facing == 'NORTH') and (robot.matrix[robot.locX - 1][robot.locY] != 'WALL') and (robot.locX > 0) :
+        if (direction == 'NORTH') and (robot.facing == 'NORTH') and (robot.matrix[robot.locX - 1][robot.locY] != 'WALL') \
+                and (robot.locX > 0) :
             robot.matrix[robot.locX][robot.locY] = 'EMPTY'
             robot.matrix[robot.locX - 1][robot.locY] = 'ROBOT'
             robot.move('NORTH')
         elif (direction == 'NORTHWEST') and (robot.facing == 'NORTHWEST') and (robot.matrix[robot.locX - 1][robot.locY - 1] != 'WALL') \
-              and (robot.locX > 0) and (robot.locY > 0):
-            robot.matrix[robot.locX][robot.locY] = 'EMPTY';
-                Matrix[Rob1.getX() - 1][Rob1.getY() - 1] = ROBOT;
-                Rob1.move(NORTHWEST);
-                }
-            else
-                if ((direction == SOUTH) & & (Rob1.getFacing() == SOUTH) & & (
-                        Matrix[Rob1.getX() + 1][Rob1.getY()] != WALL) & & (Rob1.getX() < n_rows - 1))
-                    {
-                        Matrix[Rob1.getX()][Rob1.getY()] = NONE;
-                    Matrix[Rob1.getX() + 1][Rob1.getY()] = ROBOT;
-                    Rob1.move(SOUTH);
-                    }
-                    else
-                    if ((direction == SOUTHEAST) & & (Rob1.getFacing() == SOUTHEAST) & & (
-                            Matrix[Rob1.getX() + 1][Rob1.getY() + 1] != WALL) & & (Rob1.getX() < n_rows - 1) & & (
-                            Rob1.getY() < n_cols - 1))
-                        {
-                            Matrix[Rob1.getX()][Rob1.getY()] = NONE;
-                        Matrix[Rob1.getX() + 1][Rob1.getY() + 1] = ROBOT;
-                        Rob1.move(SOUTHEAST);
-                        }
-                        else
-                        if ((direction == EAST) & & (Rob1.getFacing() == EAST) & & (
-                                Matrix[Rob1.getX()][Rob1.getY() + 1] != WALL) & & (Rob1.getY() < n_cols - 1))
-                            {
-                                Matrix[Rob1.getX()][Rob1.getY()] = NONE;
-                            Matrix[Rob1.getX()][Rob1.getY() + 1] = ROBOT;
-                            Rob1.move(EAST);
-                            }
-                            else
-                            if ((direction == SOUTHWEST) & & (Rob1.getFacing() == SOUTHWEST) & & (
-                                    Matrix[Rob1.getX() + 1][Rob1.getY() - 1] != WALL) & & (
-                                    Rob1.getX() < n_rows - 1) & & (Rob1.getY() > 0))
-                                {
-                                    Matrix[Rob1.getX()][Rob1.getY()] = NONE;
-                                Matrix[Rob1.getX() + 1][Rob1.getY() - 1] = ROBOT;
-                                Rob1.move(SOUTHWEST);
-                                }
-                                else
-                                if ((direction == WEST) & & (Rob1.getFacing() == WEST) & & (
-                                        Matrix[Rob1.getX()][Rob1.getY() - 1] != WALL) & & (Rob1.getY() > 0))
-                                    {
-                                        Matrix[Rob1.getX()][Rob1.getY()] = NONE;
-                                    Matrix[Rob1.getX()][Rob1.getY() - 1] = ROBOT;
-                                    Rob1.move(WEST);
-                                    }
-                                    else
-                                    if ((direction == NORTHEAST) & & (Rob1.getFacing() == NORTHEAST) & & (
-                                            Matrix[Rob1.getX() - 1][Rob1.getY() + 1] != WALL) & & (
-                                            Rob1.getX() > 0) & & (Rob1.getY() < n_cols - 1))
-                                        {
-                                            Matrix[Rob1.getX()][Rob1.getY()] = NONE;
-                                        Matrix[Rob1.getX() - 1][Rob1.getY() + 1] = ROBOT;
-                                        Rob1.move(NORTHEAST);
-                                        }
+                and (robot.locX > 0) and (robot.locY > 0):
+            robot.matrix[robot.locX][robot.locY] = 'EMPTY'
+            robot.matrix[robot.locX-1][robot.locY-1] = 'ROBOT'
+            robot.move('NORTHWEST')
+        elif (direction == 'NORTHEAST') and (robot.facing == 'NORTHEAST') and (robot.matrix[robot.locX - 1][robot.locY + 1] != 'WALL') \
+                and (robot.locX > 0) and (robot.locY < self.nColumns):
+            robot.matrix[robot.locX][robot.locY] = 'EMPTY'
+            robot.matrix[robot.locX-1][robot.locY+1] = 'ROBOT'
+            robot.move('NORTHEAST')
 
-                                        }
+        elif (direction == 'SOUTH') and (robot.facing == 'SOUTH') and (robot.matrix[robot.locX+1][robot.locY] != 'WALL') \
+                and (robot.locX < self.nRows):
+            robot.matrix[robot.locX][robot.locY] = 'EMPTY'
+            robot.matrix[robot.locX+1][robot.locY] = 'ROBOT'
+            robot.move('SOUTH')
+        elif (direction == 'SOUTHWEST') and (robot.facing == 'SOUTHWEST') and (robot.matrix[robot.locX + 1][robot.locY-1] != 'WALL') \
+                and (robot.locX < self.nRows) and (robot.locY > 0):
+            robot.matrix[robot.locX][robot.locY] = 'EMPTY'
+            robot.matrix[robot.locX+1][robot.locY-1] = 'ROBOT'
+            robot.move('SOUTHWEST')
+        elif (direction == 'SOUTHEAST') and (robot.facing == 'SOUTHEAST') and (robot.matrix[robot.locX + 1][robot.locY+1] != 'WALL') \
+                and (robot.locX < self.nRows) and (robot.locY < self.nColumns):
+            robot.matrix[robot.locX][robot.locY] = 'EMPTY'
+            robot.matrix[robot.locX+1][robot.locY+1] = 'ROBOT'
+            robot.move('SOUTHEAST')
 
-                                        '''
+        elif (direction == 'EAST') and (robot.facing == 'EAST') and (robot.matrix[robot.locX][robot.locY+1] != 'WALL') \
+                and (robot.locY < self.nColumns):
+            robot.matrix[robot.locX][robot.locY] = 'EMPTY'
+            robot.matrix[robot.locX][robot.locY+1] = 'ROBOT'
+            robot.move('EAST')
+        elif (direction == 'WEST') and (robot.facing == 'WEST') and (robot.matrix[robot.locX][robot.locY-1] != 'WALL') \
+                and (robot.locY > 0):
+            robot.matrix[robot.locX][robot.locY] = 'EMPTY'
+            robot.matrix[robot.locX][robot.locY-1] = 'ROBOT'
+            robot.move('WEST')
+
+'''
     Instancia todas as possíveis configurações - 0 em todas as posições da matriz e todas as permutações
     Adiciona todas essas instâncias como nós
     Adiciona aresta entre as entidades que possuem o 0 em posições i+1, j-1,j+1 ou i-1 com relação ao nó atual
