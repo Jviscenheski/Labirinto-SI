@@ -4,6 +4,8 @@ import numpy as np
 
 maxRows = 20
 maxColumns = 20
+CLOCKWISE = 1
+COUNTERCLOCK = 0
 
 
 class Robot:
@@ -235,6 +237,42 @@ class Environment:
             robot.matrix[robot.locX][robot.locY] = 'EMPTY'
             robot.matrix[robot.locX][robot.locY-1] = 'ROBOT'
             robot.move('WEST')
+
+    def rotateRobot(self, rotation, robot):
+        if rotation == CLOCKWISE:
+            if robot.facing == 'NORTH':
+                robot.facing = 'NORTHEAST'
+            elif robot.facing == 'NORTHEAST':
+                robot.facing = 'EAST'
+            elif robot.facing == 'EAST':
+                robot.facing = 'SOUTHEAST'
+            elif robot.facing == 'SOUTHEAST':
+                robot.facing = 'SOUTH'
+            elif robot.facing == 'SOUTH':
+                robot.facing = 'SOUTHWEST'
+            elif robot.facing == 'SOUTHWEST':
+                robot.facing = 'WEST'
+            elif robot.facing == 'WEST':
+                robot.facing = 'NORTHWEST'
+            elif robot.facing == 'NORTHWEST':
+                robot.facing = 'NORTH'
+        if rotation == COUNTERCLOCK:
+            if robot.facing == 'NORTH':
+                robot.facing = 'NORTHWEST'
+            elif robot.facing == 'NORTHWEST':
+                robot.facing = 'WEST'
+            elif robot.facing == 'WEST':
+                robot.facing = 'SOUTWHEST'
+            elif robot.facing == 'SOUTHWEST':
+                robot.facing = 'SOUTH'
+            elif robot.facing == 'SOUTH':
+                robot.facing = 'SOUTHEAST'
+            elif robot.facing == 'SOUTHEAST':
+                robot.facing = 'EAST'
+            elif robot.facing == 'EAST':
+                robot.facing = 'NORTHEAST'
+            elif robot.facing == 'NORTHEAST':
+                robot.facing = 'NORTH'
 
 '''
     Instancia todas as possíveis configurações - 0 em todas as posições da matriz e todas as permutações
