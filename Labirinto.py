@@ -1,6 +1,4 @@
-import networkx as nx
-import numpy as np
-
+# -*- coding: utf-8 -*-
 
 maxRows = 20
 maxColumns = 20
@@ -48,7 +46,7 @@ class Robot:
             self.locX = self.locX - 1
 
     def printState(self):
-        print("Robot position: X=%d, Y=%d, facing:", self.locX, self.locY)
+        print("Robot position: X =", self.locX,"Y =", self.locY, "facing:", end = "")
         if self.facing == 'NORTH':
             print(" NORTH\n")
         if self.facing == 'EAST':
@@ -77,57 +75,55 @@ class Environment:
     def scanStateFromFile(self, robot):
         lineList = []
         with open("mapa.txt") as file:
-            if not file:
+            if file:
                 for line in file:
                     lineList.append(line.strip())
+                
+                del lineList[0]
+                del lineList[0]
+
+                self.nColumns = len(lineList[0])
+                self.nRows = len(lineList)
+                lineIndex = 0
+                columnIndex = 0
+
+                for line in lineList:
+                    for char in line:
+                        if char == ".":
+                            self.matrix[lineIndex][columnIndex] = 'EMPTY'
+                        elif char == "*":
+                            self.matrix[lineIndex][columnIndex] = 'WALL'
+                        elif char == "^":
+                            self.matrix[lineIndex][columnIndex] = 'ROBOT'
+                            robot.setLocation(lineIndex, columnIndex)
+                            robot.facing = 'NORTH'
+                        elif char == "<":
+                            self.matrix[lineIndex][columnIndex] = 'ROBOT'
+                            robot.setLocation(lineIndex, columnIndex)
+                            robot.facing = 'WEST'
+                        elif char == "v":
+                            self.matrix[lineIndex][columnIndex] = 'ROBOT'
+                            robot.setLocation(lineIndex, columnIndex)
+                            robot.facing = 'SOUTH'
+                        elif char == ">":
+                            self.matrix[lineIndex][columnIndex] = 'ROBOT'
+                            robot.setLocation(lineIndex, columnIndex)
+                            robot.facing = 'EAST'
+                        elif char == "x":
+                            self.matrix[lineIndex][columnIndex] = 'TARGET'
+
+                        columnIndex = columnIndex + 1
+                    columnIndex = 0
+                    lineIndex = lineIndex + 1
+    
+            
             else:
                 print("File source is empty! :(")
 
-        del lineList[0]
-        del lineList[0]
-
-        lineIndex = 0
-        columnIndex = 0
-
-        for line in lineList:
-            for char in line:
-
-                if char == ".":
-                    self.matrix[lineIndex][columnIndex] = 'EMPTY'
-                elif char == "*":
-                    self.matrix[lineIndex][columnIndex] = 'WALL'
-                elif char == "^":
-                    self.matrix[lineIndex][columnIndex] = 'ROBOT'
-                    robot.setLocation(lineIndex, columnIndex)
-                    robot.facing = 'NORTH'
-                elif char == "<":
-                    self.matrix[lineIndex][columnIndex] = 'ROBOT'
-                    robot.setLocation(lineIndex, columnIndex)
-                    robot.facing = 'WEST'
-                elif char == "v":
-                    self.matrix[lineIndex][columnIndex] = 'ROBOT'
-                    robot.setLocation(lineIndex, columnIndex)
-                    robot.facing = 'SOUTH'
-                elif char == ">":
-                    self.matrix[lineIndex][columnIndex] = 'ROBOT'
-                    robot.setLocation(lineIndex, columnIndex)
-                    robot.facing = 'EAST'
-                elif char == "x":
-                    self.matrix[lineIndex][columnIndex] = 'TARGET'
-
-
-                columnIndex = columnIndex + 1
-            columnIndex = 0
-            lineIndex = lineIndex + 1
-
-    def scanState(self):
-        # recolhe número de linhas
-        # recolhe número de colunas
-        number_rows = 1998
-        number_columns = 1998
-
-        for line in range(0, number_rows):
-            for column in range(0, number_columns):
+        
+    def scanState(self): # nao entendi pra que isso serve haha
+        for line in range(self.nRows):
+            for column in range(self.nColumns):
                 # recolhe o caracter
                 char = "null"
                 if char == ">":
@@ -146,53 +142,56 @@ class Environment:
                     self.matrix[line][column] = 'ROBOT'
 
     def printState(self, robot):
-        n_cols = 20 #??
-        n_rows = 20 #??
-        r = 0
-        c = 0
-        print("    ")
-        for i in range(0, n_cols):
-            print(str(i))
-
-        print("\n")
-        print("    ")
-        for i in range(0, n_cols):
-            print("+---")
-        print("+\n")
-        for r in range(0, n_rows):
-            print(str(r))
-            for c in range(0, n_cols):
+        print("    ", end = '')
+        for i in range(self.nColumns):
+            print(str(i), end = '')
+            if i < 10:
+                print("   ", end = '')
+            else:
+                print("  ", end = '')
+        print('')
+        print('  ', end = '')
+        for i in range(self.nColumns):
+            print("+---", end = '')
+        print("+")
+        for r in range(self.nRows):
+            if r < 10: 
+                print('', str(r), end = '')
+            else:
+                print(str(r), end = '')
+            for c in range(self.nColumns):
                 if self.matrix[r][c] == 'WALL':
-                    print( "|***" )
+                    print("|***", end = '')
                 if self.matrix[r][c] == 'TARGET':
-                    print( "| X " )
+                    print("| X ", end = '')
                 if self.matrix[r][c] == 'EMPTY':
-                    print( "|   " )
+                    print("|   ", end = '')
                 if self.matrix[r][c] == 'ROBOT':
                     if robot.facing == 'NORTH':
-                        print("| ^ ")
+                        print("| ^ ", end = '')
                     elif robot.facing == 'NORTHEAST':
-                        print("| / ")
+                        print("| / ", end = '')
                     elif robot.facing == 'EAST':
-                        print("| > ")
+                        print("| > ", end = '')
                     elif robot.facing == 'SOUTHEAST':
-                        print("| \\ ")
+                        print("| \\ ", end = '')
                     elif robot.facing == 'SOUTH':
-                        print("| v ")
+                        print("| v ", end = '')
                     elif robot.facing == 'SOUTHWEST':
-                        print("| %% ")
+                        print("| %% ", end = '')
                     elif robot.facing == 'WEST':
-                        print("| < ")
+                        print("| < ", end = '')
                     elif robot.facing == 'NORTHWEST':
-                        print("| # ")
+                        print("| # ", end = '')
 
-            print( "|\n" )
-            print("    ")
-            for i in range(0, n_cols):
-                print("+---")
-                print("+\n")
+            print( "|", end = '' )
+            print('')
+            print("  ", end = '')
+            for i in range(self.nColumns):
+                print("+---", end = '')
+            print("+")
 
-        robot.print_state()
+        robot.printState()
 
     def moveRobot(self, direction, robot):
         if (direction == 'NORTH') and (robot.facing == 'NORTH') and (robot.matrix[robot.locX - 1][robot.locY] != 'WALL') \
@@ -284,4 +283,14 @@ class Environment:
     Tcharam
 '''
 
+def main():
+    
+    robot = Robot()
+    env = Environment()
+    env.scanStateFromFile(robot)
+    print(env.matrix)
+    env.printState(robot)
 
+
+if __name__ == '__main__':
+    main()
