@@ -5,7 +5,6 @@ maxColumns = 20
 CLOCKWISE = 1
 COUNTERCLOCK = 0
 
-
 class Robot:
 
     def __init__(self):
@@ -194,51 +193,51 @@ class Environment:
         robot.printState()
 
     def moveRobot(self, direction, robot):
-        if (direction == 'NORTH') and (robot.facing == 'NORTH') and (robot.matrix[robot.locX - 1][robot.locY] != 'WALL') \
+        if (direction == 'NORTH') and (robot.facing == 'NORTH') and (self.matrix[robot.locX - 1][robot.locY] != 'WALL') \
                 and (robot.locX > 0) :
-            robot.matrix[robot.locX][robot.locY] = 'EMPTY'
-            robot.matrix[robot.locX - 1][robot.locY] = 'ROBOT'
+            self.matrix[robot.locX][robot.locY] = 'EMPTY'
+            self.matrix[robot.locX - 1][robot.locY] = 'ROBOT'
             robot.move('NORTH')
-        elif (direction == 'NORTHWEST') and (robot.facing == 'NORTHWEST') and (robot.matrix[robot.locX - 1][robot.locY - 1] != 'WALL') \
+        elif (direction == 'NORTHWEST') and (robot.facing == 'NORTHWEST') and (self.matrix[robot.locX - 1][robot.locY - 1] != 'WALL') \
                 and (robot.locX > 0) and (robot.locY > 0):
-            robot.matrix[robot.locX][robot.locY] = 'EMPTY'
-            robot.matrix[robot.locX-1][robot.locY-1] = 'ROBOT'
+            self.matrix[robot.locX][robot.locY] = 'EMPTY'
+            self.matrix[robot.locX-1][robot.locY-1] = 'ROBOT'
             robot.move('NORTHWEST')
-        elif (direction == 'NORTHEAST') and (robot.facing == 'NORTHEAST') and (robot.matrix[robot.locX - 1][robot.locY + 1] != 'WALL') \
+        elif (direction == 'NORTHEAST') and (robot.facing == 'NORTHEAST') and (self.matrix[robot.locX - 1][robot.locY + 1] != 'WALL') \
                 and (robot.locX > 0) and (robot.locY < self.nColumns):
-            robot.matrix[robot.locX][robot.locY] = 'EMPTY'
-            robot.matrix[robot.locX-1][robot.locY+1] = 'ROBOT'
+            self.matrix[robot.locX][robot.locY] = 'EMPTY'
+            self.matrix[robot.locX-1][robot.locY+1] = 'ROBOT'
             robot.move('NORTHEAST')
 
-        elif (direction == 'SOUTH') and (robot.facing == 'SOUTH') and (robot.matrix[robot.locX+1][robot.locY] != 'WALL') \
+        elif (direction == 'SOUTH') and (robot.facing == 'SOUTH') and (self.matrix[robot.locX+1][robot.locY] != 'WALL') \
                 and (robot.locX < self.nRows):
-            robot.matrix[robot.locX][robot.locY] = 'EMPTY'
-            robot.matrix[robot.locX+1][robot.locY] = 'ROBOT'
+            self.matrix[robot.locX][robot.locY] = 'EMPTY'
+            self.matrix[robot.locX+1][robot.locY] = 'ROBOT'
             robot.move('SOUTH')
-        elif (direction == 'SOUTHWEST') and (robot.facing == 'SOUTHWEST') and (robot.matrix[robot.locX + 1][robot.locY-1] != 'WALL') \
+        elif (direction == 'SOUTHWEST') and (robot.facing == 'SOUTHWEST') and (self.matrix[robot.locX + 1][robot.locY-1] != 'WALL') \
                 and (robot.locX < self.nRows) and (robot.locY > 0):
-            robot.matrix[robot.locX][robot.locY] = 'EMPTY'
-            robot.matrix[robot.locX+1][robot.locY-1] = 'ROBOT'
+            self.matrix[robot.locX][robot.locY] = 'EMPTY'
+            self.matrix[robot.locX+1][robot.locY-1] = 'ROBOT'
             robot.move('SOUTHWEST')
-        elif (direction == 'SOUTHEAST') and (robot.facing == 'SOUTHEAST') and (robot.matrix[robot.locX + 1][robot.locY+1] != 'WALL') \
+        elif (direction == 'SOUTHEAST') and (robot.facing == 'SOUTHEAST') and (self.matrix[robot.locX + 1][robot.locY+1] != 'WALL') \
                 and (robot.locX < self.nRows) and (robot.locY < self.nColumns):
-            robot.matrix[robot.locX][robot.locY] = 'EMPTY'
-            robot.matrix[robot.locX+1][robot.locY+1] = 'ROBOT'
+            self.matrix[robot.locX][robot.locY] = 'EMPTY'
+            self.matrix[robot.locX+1][robot.locY+1] = 'ROBOT'
             robot.move('SOUTHEAST')
 
-        elif (direction == 'EAST') and (robot.facing == 'EAST') and (robot.matrix[robot.locX][robot.locY+1] != 'WALL') \
+        elif (direction == 'EAST') and (robot.facing == 'EAST') and (self.matrix[robot.locX][robot.locY+1] != 'WALL') \
                 and (robot.locY < self.nColumns):
-            robot.matrix[robot.locX][robot.locY] = 'EMPTY'
-            robot.matrix[robot.locX][robot.locY+1] = 'ROBOT'
+            self.matrix[robot.locX][robot.locY] = 'EMPTY'
+            self.matrix[robot.locX][robot.locY+1] = 'ROBOT'
             robot.move('EAST')
-        elif (direction == 'WEST') and (robot.facing == 'WEST') and (robot.matrix[robot.locX][robot.locY-1] != 'WALL') \
+        elif (direction == 'WEST') and (robot.facing == 'WEST') and (self.matrix[robot.locX][robot.locY-1] != 'WALL') \
                 and (robot.locY > 0):
-            robot.matrix[robot.locX][robot.locY] = 'EMPTY'
-            robot.matrix[robot.locX][robot.locY-1] = 'ROBOT'
+            self.matrix[robot.locX][robot.locY] = 'EMPTY'
+            self.matrix[robot.locX][robot.locY-1] = 'ROBOT'
             robot.move('WEST')
 
     def rotateRobot(self, rotation, robot):
-        if rotation == CLOCKWISE:
+        if rotation == 'd':
             if robot.facing == 'NORTH':
                 robot.facing = 'NORTHEAST'
             elif robot.facing == 'NORTHEAST':
@@ -255,13 +254,13 @@ class Environment:
                 robot.facing = 'NORTHWEST'
             elif robot.facing == 'NORTHWEST':
                 robot.facing = 'NORTH'
-        if rotation == COUNTERCLOCK:
+        if rotation == 'a':
             if robot.facing == 'NORTH':
                 robot.facing = 'NORTHWEST'
             elif robot.facing == 'NORTHWEST':
                 robot.facing = 'WEST'
             elif robot.facing == 'WEST':
-                robot.facing = 'SOUTWHEST'
+                robot.facing = 'SOUTHWEST'
             elif robot.facing == 'SOUTHWEST':
                 robot.facing = 'SOUTH'
             elif robot.facing == 'SOUTH':
@@ -288,8 +287,25 @@ def main():
     robot = Robot()
     env = Environment()
     env.scanStateFromFile(robot)
-    print(env.matrix)
-    env.printState(robot)
+    #print(env.matrix)
+    #env.printState(robot)
+
+    while True:
+        print(env.matrix)
+        env.printState(robot)
+        key = input('W para ir para frente, A e D para rotacionar e Q para sair. ')
+        if key == 'a' or key == 'd':
+            env.rotateRobot(key, robot)
+            #print('Facing:', robot.facing, '\nPosition: (', robot.locX, ',', robot.locY, ')')
+        elif key == 'w':
+            env.moveRobot(robot.facing, robot)
+            #print('Facing:', robot.facing, '\nPosition: (', robot.locX, ',', robot.locY, ')')
+        elif key == 'q':
+            break
+        else:
+            print('Invalid key!')
+        key = ''
+
 
 
 if __name__ == '__main__':
