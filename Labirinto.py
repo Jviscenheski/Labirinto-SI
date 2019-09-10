@@ -70,6 +70,8 @@ class Environment:
         self.nRows = "null"
         self.nColumns = "null"
         self.matrix = [[0 for x in range(maxRows)] for y in range(maxColumns)]
+        self.start = (0,0)
+        self.end = (0,0)
 
     def scanStateFromFile(self, robot):
         lineList = []
@@ -96,20 +98,25 @@ class Environment:
                             self.matrix[lineIndex][columnIndex] = 'ROBOT'
                             robot.setLocation(lineIndex, columnIndex)
                             robot.facing = 'NORTH'
+                            self.start = (lineIndex,columnIndex)
                         elif char == "<":
                             self.matrix[lineIndex][columnIndex] = 'ROBOT'
                             robot.setLocation(lineIndex, columnIndex)
                             robot.facing = 'WEST'
+                            self.start = (lineIndex,columnIndex)
                         elif char == "v":
                             self.matrix[lineIndex][columnIndex] = 'ROBOT'
                             robot.setLocation(lineIndex, columnIndex)
                             robot.facing = 'SOUTH'
+                            self.start = (lineIndex,columnIndex)
                         elif char == ">":
                             self.matrix[lineIndex][columnIndex] = 'ROBOT'
                             robot.setLocation(lineIndex, columnIndex)
                             robot.facing = 'EAST'
+                            self.start = (lineIndex,columnIndex)
                         elif char == "x":
                             self.matrix[lineIndex][columnIndex] = 'TARGET'
+                            self.end = (lineIndex, columnIndex)
 
                         columnIndex = columnIndex + 1
                     columnIndex = 0
@@ -282,24 +289,51 @@ class Environment:
     Tcharam
 '''
 
+class Node():
+    def __init__(self, parent=None, position=None):
+        self.parent = parent
+        self.position = position
+
+        self.g = 0
+        self.h = 0
+        self.f = 0
+
+    def __eq__(self, other):
+        return self.position == other.position
+
+def astar(env: Environment):
+    # Cria os nós final e inicial da busca.
+    start_node = Node(None, env.start)
+    start_node.g = start_node.h = start_node.f = 0
+    end_node = Node(None, env.end)
+    end_node.g = end_node.h = end_node.f = 0
+
+    open_list = []
+    closed_list = []
+    open_list.append(start_node)
+
+    # Loop até encontrar o nó final.
+    while len(open_list) > 0:
+        current_node = open_list[0]
+        current_index = 0
+        for index, item in enumerate(open_list):
+            if item.f < current_node.f:
+                current_node = item
+                current_index = index
+
 def main():
     
     robot = Robot()
     env = Environment()
     env.scanStateFromFile(robot)
-    #print(env.matrix)
-    #env.printState(robot)
 
     while True:
-        print(env.matrix)
         env.printState(robot)
         key = input('W para ir para frente, A e D para rotacionar e Q para sair. ')
         if key == 'a' or key == 'd':
             env.rotateRobot(key, robot)
-            #print('Facing:', robot.facing, '\nPosition: (', robot.locX, ',', robot.locY, ')')
         elif key == 'w':
             env.moveRobot(robot.facing, robot)
-            #print('Facing:', robot.facing, '\nPosition: (', robot.locX, ',', robot.locY, ')')
         elif key == 'q':
             break
         else:
