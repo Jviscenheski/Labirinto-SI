@@ -29,13 +29,16 @@ def best_first(maze):
     cust = 0
     path = []
 
+    iterations = 0
+
     while current.x < maze.nRows and current.y < maze.nColumns:
 
         positions = []
+
         # verificando cada posição alcançável pela minha posição atual
         for coordinate in [(current.x, current.y+1), (current.x, current.y-1), (current.x+1, current.y), (current.x-1, current.y),
             (current.x+1, current.y+1), (current.x+1, current.y-1), (current.x-1, current.y+1), (current.x-1, current.y-1)]:
-
+            iterations += 1
             x = coordinate[0]
             y = coordinate[1]
             stuff = scanMaze(maze, x, y)
@@ -72,7 +75,7 @@ def best_first(maze):
         if current.x == end.x and current.y == end.y:
             break
 
-    print('Numero de movimentos: ', moves, ' | Custo: ', cust)
+    print('Numero de movimentos: ', moves, ' | Custo: ', cust, '| Operações: ', iterations)
     print('Coordenadas: ')
     for decision in path:
         print(decision.x, decision.y)
