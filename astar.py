@@ -128,7 +128,7 @@ def astar(maze, robot):
 
     current = start
     moves = 0
-    cust = 0
+    custo = 0
     iterations = 0
     path = []
 
@@ -150,20 +150,12 @@ def astar(maze, robot):
 
         positions.sort(key=lambda x: x.f)  # ordenei pelo menor custo
 
-        #indexes = []
-        #for node1 in path:
-        #    for index, node2 in enumerate(positions):
-        #        if node1 == node2:
-        #            indexes.append(index)
-        #for index in indexes:
-        #    positions.pop(index)
 
         choice = positions[0]
         new_position = Node(current, choice.x, choice.y)  # definindo meu próximo movimento
-        moves += 1
-        path.append(new_position)
+        new_position.g = choice.g
 
-        cust += choice.g
+        path.append(new_position)
 
         current = new_position
 
@@ -172,7 +164,12 @@ def astar(maze, robot):
         if current.x == end.x and current.y == end.y:
             break
 
-    print('Numero de movimentos: ', moves, ' | Custo: ', cust, ' | Operações: ', iterations)
+
+    for node in path:
+        custo += node.g
+        moves += 1
+
+    print('Numero de movimentos: ', moves, ' | Custo: ', custo, ' | Operações: ', iterations)
     print('Coordenadas: ')
     for decision in path:
         print(decision.x, decision.y)
@@ -194,3 +191,4 @@ def scanMaze(maze, x, y):
                     break
             break
     return maze.matrix[row][column]
+
