@@ -12,7 +12,7 @@ class Node():
 
         self.facing = 'null'
 
-def calculag(node, x, y):
+def calculag(node, x, y, pos):
     turn = 1
     g = 0
     if (abs(x - node.x) == 1) and (abs(y - node.y) == 1):  # diagonal
@@ -111,7 +111,7 @@ def calculag(node, x, y):
             elif node.facing == 'SOUTHEAST':
                 g += 4 * turn
 
-    node.facing = direction
+    pos.facing = direction
     return g
 
 def astar(maze, robot):
@@ -143,13 +143,21 @@ def astar(maze, robot):
             stuff = scanMaze(maze, x, y)
             if stuff != 'WALL':
                 pos = Node(current, x, y)
-                pos.facing = current.facing
-                pos.g = calculag(current, x, y)
+                pos.g = calculag(current, x, y, pos)
                 pos.h = end.x-x + end.y-y # calculando custo apenas com base na distância
                 pos.f = pos.g + pos.h 
                 positions.append(pos)
 
         positions.sort(key=lambda x: x.f)  # ordenei pelo menor custo
+
+        #indexes = []
+        #for node1 in path:
+        #    for index, node2 in enumerate(positions):
+        #        if node1 == node2:
+        #            indexes.append(index)
+        #for index in indexes:
+        #    positions.pop(index)
+
         choice = positions[0]
         new_position = Node(current, choice.x, choice.y)  # definindo meu próximo movimento
         moves += 1
@@ -164,7 +172,7 @@ def astar(maze, robot):
         if current.x == end.x and current.y == end.y:
             break
 
-    print('Numero de movimentos: ', moves, ' | Custo: ', cust, ' | Iterações: ', iterations)
+    print('Numero de movimentos: ', moves, ' | Custo: ', cust, ' | Operações: ', iterations)
     print('Coordenadas: ')
     for decision in path:
         print(decision.x, decision.y)
