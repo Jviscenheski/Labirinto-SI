@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import best_first as bf
+
 maxRows = 20
 maxColumns = 20
 CLOCKWISE = 1
@@ -126,8 +128,7 @@ class Environment:
             else:
                 print("File source is empty! :(")
 
-        
-    def scanState(self): # nao entendi pra que isso serve haha
+    def scanState(self):  # nao entendi pra que isso serve haha
         for line in range(self.nRows):
             for column in range(self.nColumns):
                 # recolhe o caracter
@@ -201,7 +202,7 @@ class Environment:
 
     def moveRobot(self, direction, robot):
         if (direction == 'NORTH') and (robot.facing == 'NORTH') and (self.matrix[robot.locX - 1][robot.locY] != 'WALL') \
-                and (robot.locX > 0) :
+                and (robot.locX > 0):
             self.matrix[robot.locX][robot.locY] = 'EMPTY'
             self.matrix[robot.locX - 1][robot.locY] = 'ROBOT'
             robot.move('NORTH')
@@ -289,57 +290,26 @@ class Environment:
     Tcharam
 '''
 
-class Node():
-    def __init__(self, parent=None, position=None):
-        self.parent = parent
-        self.position = position
-
-        self.g = 0
-        self.h = 0
-        self.f = 0
-
-    def __eq__(self, other):
-        return self.position == other.position
-
-def astar(env: Environment):
-    # Cria os nós final e inicial da busca.
-    start_node = Node(None, env.start)
-    start_node.g = start_node.h = start_node.f = 0
-    end_node = Node(None, env.end)
-    end_node.g = end_node.h = end_node.f = 0
-
-    open_list = []
-    closed_list = []
-    open_list.append(start_node)
-
-    # Loop até encontrar o nó final.
-    while len(open_list) > 0:
-        current_node = open_list[0]
-        current_index = 0
-        for index, item in enumerate(open_list):
-            if item.f < current_node.f:
-                current_node = item
-                current_index = index
-
 def main():
     
     robot = Robot()
     env = Environment()
     env.scanStateFromFile(robot)
 
-    while True:
-        env.printState(robot)
-        key = input('W para ir para frente, A e D para rotacionar e Q para sair. ')
-        if key == 'a' or key == 'd':
-            env.rotateRobot(key, robot)
-        elif key == 'w':
-            env.moveRobot(robot.facing, robot)
-        elif key == 'q':
-            break
-        else:
-            print('Invalid key!')
-        key = ''
+    #while True:
+    #    env.printState(robot)
+    #    key = input('W para ir para frente, A e D para rotacionar e Q para sair. ')
+    #    if key == 'a' or key == 'd':
+    #        env.rotateRobot(key, robot)
+    #    elif key == 'w':
+    #        env.moveRobot(robot.facing, robot)
+    #    elif key == 'q':
+    #        break
+    #    else:
+    #        print('Invalid key!')
+    #    key = ''
 
+    bf.best_first(env, 0, 0, env.nRows-1, env.nColumns-1)
 
 
 if __name__ == '__main__':
