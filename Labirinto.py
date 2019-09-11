@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import best_first as bf
+import astar
 
 maxRows = 20
 maxColumns = 20
-CLOCKWISE = 1
-COUNTERCLOCK = 0
 
 class Robot:
 
@@ -308,8 +307,8 @@ def main():
     #    else:
     #        print('Invalid key!')
     #    key = ''
-
-    bf.best_first(env, 0, 0, env.nRows-1, env.nColumns-1)
+    astar.astar(env, robot)
+    #bf.best_first(env)
 
 
 if __name__ == '__main__':

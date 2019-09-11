@@ -3,7 +3,6 @@ class Node():
 
     def __init__(self, parent=None, x=None, y=None):
         self.parent = parent
-        # self.position = position
         self.x = x
         self.y = y
 
@@ -11,11 +10,13 @@ class Node():
         self.h = 0  # custo do movimento
         self.f = 0  # custo total
 
-    def __eq__(self, other):
-        return self.position == other.position
 
 
-def best_first(maze, sx, sy, ex, ey):
+def best_first(maze):
+    sx = maze.start[0]
+    sy = maze.start[1]
+    ex = maze.end[0]
+    ey = maze.end[1]
     start = Node(None, sx, sy)
     start.f = 0
     end = Node(None, ex, ey)
