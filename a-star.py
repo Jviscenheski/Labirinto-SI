@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from heapq import heappush, heappop # para ordem de prioridade
 import math
 import time
@@ -28,7 +30,7 @@ class node:
         d = (xd ** 2) + (yd **2)
         return(d)
 
-def pathFind(map, n, m, dirs, dx, dy, xA, yA, xB, yB):
+def pathFind(the_map, n, m, dirs, dx, dy, xA, yA, xB, yB):
     closed_nodes_map = [] # mapa de nodes que ja foram testados
     open_nodes_map = [] # mapa de nodes que não foram testados
     dir_map = [] # mapa de direções
@@ -65,16 +67,17 @@ def pathFind(map, n, m, dirs, dx, dy, xA, yA, xB, yB):
                 j = dir_map[y][x]
                 c = str((j + dirs / 2) % dirs)
                 path = c + path
-                x += dx[i]
+                x += dx[j]
                 y += dy[j]
             return path
+
 
         # gera os movimentos possíveis (nodes filhos) em todas as direções
         for i in range(dirs):
             xdx = x + dx[i]
             ydy = y + dy[i]
             if not (xdx < 0 or xdx > n-1 or ydy < 0 or ydy > m-1 or
-                    map[ydy][xdx] == 1 or closed_nodes_map[ydy][xdx] == 1):
+                    the_map[ydy][xdx] == 1 or closed_nodes_map[ydy][xdx] == 1):
                 # gera node filho
                 m0 = node(xdx, ydy, n0.distance, n0.priority)
                 m0.nextMove(dirs, i)
@@ -115,8 +118,8 @@ elif dirs == 8:
     dx = [1, 1, 0, -1, -1, -1, 0, 1]
     dy = [0, 1, 1, 1, 0, -1, -1, -1]
 
-n = 30 # horizontal size of the map
-m = 30 # vertical size of the map
+n = 20 # horizontal size of the map
+m = 20 # vertical size of the map
 the_map = []
 row = [0] * n
 for i in range(m): # create empty map
