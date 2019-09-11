@@ -21,9 +21,13 @@ class Node():
     def __eq__(self, other):
         return self.position == other.position
 
+
 def bestfirst(maze, start, end):
     """Returns a list of tuples as a path from the given start to the given end in the given maze"""
-   
+
+    custo = 0
+    lastOrientation = ">"
+    trans_count = 0
     # Create start and end node
     start_node = Node(None, start)
     start_node.f = 0
@@ -58,6 +62,8 @@ def bestfirst(maze, start, end):
             while current is not None:
                 path.append(current.position)
                 current = current.parent
+            print("Total cost: " + str(custo))
+            print("Total transitions: " + str(trans_count))
             return path[::-1] # Return reversed path
 
         # Generate children
@@ -77,6 +83,25 @@ def bestfirst(maze, start, end):
 
             # Create new node
             new_node = Node(current_node, node_position)
+            print(node_position)
+            print(current_node.position)
+
+            if node_position[1] == current_node.position[1] + 1:  # foi pra frente - sem rotação
+                trans_count = trans_count + 1
+                custo = custo + 3
+                lastOrientation = "v"
+            elif node_position[0] == current_node.position[0] + 1 :  # foi pra baixo - 2 rotações pra baixo e pra frente
+                trans_count = trans_count + 1
+                if lastOrientation == "v":
+                    custo = custo + 3  # duas rotações senti anti horário + frente
+                    lastOrientation = ">"
+                else:
+                    custo = custo + 1
+            elif (node_position[1] == current_node.position[1] + 1) and (
+                    node_position[0] == current_node.position[0] + 1):
+                trans_count = trans_count + 1
+                custo = custo + 3.5
+                lastOrientation = ">"
 
             # Append
             children.append(new_node)
@@ -220,8 +245,8 @@ def main():
 
     astarPath = astar(maze, start, end)
     print('A*:\n', astarPath)
-    #bestfirstPath = bestfirst(maze, start, end)
-    #print('Best First:\n', bestfirstPath)
+    bestfirstPath = bestfirst(maze, start, end)
+    print('Best First:\n', bestfirstPath)
 
 
 
