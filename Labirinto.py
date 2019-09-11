@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
+import best_first as bf
+import astar
+
 maxRows = 20
 maxColumns = 20
-CLOCKWISE = 1
-COUNTERCLOCK = 0
 
 class Robot:
 
@@ -70,6 +71,8 @@ class Environment:
         self.nRows = "null"
         self.nColumns = "null"
         self.matrix = [[0 for x in range(maxRows)] for y in range(maxColumns)]
+        self.start = (0,0)
+        self.end = (0,0)
 
     def scanStateFromFile(self, robot):
         lineList = []
@@ -96,20 +99,25 @@ class Environment:
                             self.matrix[lineIndex][columnIndex] = 'ROBOT'
                             robot.setLocation(lineIndex, columnIndex)
                             robot.facing = 'NORTH'
+                            self.start = (lineIndex,columnIndex)
                         elif char == "<":
                             self.matrix[lineIndex][columnIndex] = 'ROBOT'
                             robot.setLocation(lineIndex, columnIndex)
                             robot.facing = 'WEST'
+                            self.start = (lineIndex,columnIndex)
                         elif char == "v":
                             self.matrix[lineIndex][columnIndex] = 'ROBOT'
                             robot.setLocation(lineIndex, columnIndex)
                             robot.facing = 'SOUTH'
+                            self.start = (lineIndex,columnIndex)
                         elif char == ">":
                             self.matrix[lineIndex][columnIndex] = 'ROBOT'
                             robot.setLocation(lineIndex, columnIndex)
                             robot.facing = 'EAST'
+                            self.start = (lineIndex,columnIndex)
                         elif char == "x":
                             self.matrix[lineIndex][columnIndex] = 'TARGET'
+                            self.end = (lineIndex, columnIndex)
 
                         columnIndex = columnIndex + 1
                     columnIndex = 0
@@ -119,8 +127,7 @@ class Environment:
             else:
                 print("File source is empty! :(")
 
-        
-    def scanState(self): # nao entendi pra que isso serve haha
+    def scanState(self):  # nao entendi pra que isso serve haha
         for line in range(self.nRows):
             for column in range(self.nColumns):
                 # recolhe o caracter
@@ -194,7 +201,7 @@ class Environment:
 
     def moveRobot(self, direction, robot):
         if (direction == 'NORTH') and (robot.facing == 'NORTH') and (self.matrix[robot.locX - 1][robot.locY] != 'WALL') \
-                and (robot.locX > 0) :
+                and (robot.locX > 0):
             self.matrix[robot.locX][robot.locY] = 'EMPTY'
             self.matrix[robot.locX - 1][robot.locY] = 'ROBOT'
             robot.move('NORTH')
@@ -287,25 +294,21 @@ def main():
     robot = Robot()
     env = Environment()
     env.scanStateFromFile(robot)
-    #print(env.matrix)
-    #env.printState(robot)
 
-    while True:
-        print(env.matrix)
-        env.printState(robot)
-        key = input('W para ir para frente, A e D para rotacionar e Q para sair. ')
-        if key == 'a' or key == 'd':
-            env.rotateRobot(key, robot)
-            #print('Facing:', robot.facing, '\nPosition: (', robot.locX, ',', robot.locY, ')')
-        elif key == 'w':
-            env.moveRobot(robot.facing, robot)
-            #print('Facing:', robot.facing, '\nPosition: (', robot.locX, ',', robot.locY, ')')
-        elif key == 'q':
-            break
-        else:
-            print('Invalid key!')
-        key = ''
-
+    #while True:
+    #    env.printState(robot)
+    #    key = input('W para ir para frente, A e D para rotacionar e Q para sair. ')
+    #    if key == 'a' or key == 'd':
+    #        env.rotateRobot(key, robot)
+    #    elif key == 'w':
+    #        env.moveRobot(robot.facing, robot)
+    #    elif key == 'q':
+    #        break
+    #    else:
+    #        print('Invalid key!')
+    #    key = ''
+    astar.astar(env, robot)
+    bf.best_first(env)
 
 
 if __name__ == '__main__':

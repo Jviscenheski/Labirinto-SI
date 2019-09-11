@@ -21,6 +21,7 @@ class Node():
     def __eq__(self, other):
         return self.position == other.position
 
+<<<<<<< HEAD
 
 def bestfirst(maze, start, end):
     """Returns a list of tuples as a path from the given start to the given end in the given maze"""
@@ -128,6 +129,8 @@ def bestfirst(maze, start, end):
             open_list.append(child)
 
 
+=======
+>>>>>>> 4d85a952e7a22f1b397d28bff8f3dd8ba9a91f53
 def astar(maze, start, end):
     """Returns a list of tuples as a path from the given start to the given end in the given maze"""
 
