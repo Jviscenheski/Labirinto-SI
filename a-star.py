@@ -65,7 +65,7 @@ def pathFind(the_map, n, m, dirs, dx, dy, xA, yA, xB, yB):
             path = ''
             while not (x == xA and y == yA):
                 j = dir_map[y][x]
-                c = str((j + dirs / 2) % dirs)
+                c = str((j + dirs // 2) % dirs)
                 path = c + path
                 x += dx[j]
                 y += dy[j]
@@ -87,12 +87,12 @@ def pathFind(the_map, n, m, dirs, dx, dy, xA, yA, xB, yB):
                     open_nodes_map[ydy][xdx] = m0.priority
                     heappush(pq[pqi], m0)
                     # marca a posição do node pai
-                    dir_map[ydy][xdx] = (i + dirs / 2) % dirs
+                    dir_map[ydy][xdx] = (i + dirs // 2) % dirs
                 elif open_nodes_map[ydy][xdx] > m0.priority:
                     # atualiza a prioridade
                     open_nodes_map[ydy][xdx] = m0.priority
                     # atualiza a posição do node pai
-                    dir_map[ydy][xdx] = (i + dirs / 2) % dirs
+                    dir_map[ydy][xdx] = (i + dirs // 2) % dirs
                     # substitui o node, todos menos o que vai ser substituido serão ignorados
                     # e o novo será inserido no lugar
                     while not (pq[pqi][0].xPos == xdx and pq[pqi][0].yPos == ydy):
@@ -154,14 +154,14 @@ with open("mapa.txt") as file:
 n = len(lineList[0]) # horizontal size of the map
 m = len(lineList) # vertical size of the map
 
-print 'Map size (X,Y): ', n, m
-print 'Start: ', xA, yA
-print 'Finish: ', xB, yB
+print('Map size (X,Y): ', n, m)
+print('Start: ', xA, yA)
+print('Finish: ', xB, yB)
 t = time.time()
 route = pathFind(maze, n, m, dirs, dx, dy, xA, yA, xB, yB)
-print 'Time to generate the route (seconds): ', time.time() - t
-print 'Route:'
-print route
+print('Time to generate the route (seconds): ', time.time() - t)
+print('Route:')
+print(route)
 
 # mark the route on the map
 if len(route) > 0:
@@ -176,20 +176,20 @@ if len(route) > 0:
     maze[y][x] = 4
 
 # display the map with the route added
-print 'Map:'
+print('Map:')
 for y in range(m):
     for x in range(n):
         xy = maze[y][x]
         if xy == 0:
-            print '.', # space
+            print('. ', end = '') # space
         elif xy == 1:
-            print '*', # obstacle
+            print('* ', end = '') # obstacle
         elif xy == 2:
-            print 'S', # start
+            print('> ', end = '') # start
         elif xy == 3:
-            print 'R', # route
+            print('R ', end = '') # route
         elif xy == 4:
-            print 'F', # finish
-    print
+            print('X ', end = '')# finish
+    print('')
 
-raw_input('Press Enter...')
+input('\nPress Enter...')
