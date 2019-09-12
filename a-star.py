@@ -118,36 +118,47 @@ elif dirs == 8:
     dx = [1, 1, 0, -1, -1, -1, 0, 1]
     dy = [0, 1, 1, 1, 0, -1, -1, -1]
 
-n = 20 # horizontal size of the map
-m = 20 # vertical size of the map
-the_map = []
-row = [0] * n
-for i in range(m): # create empty map
-    the_map.append(list(row))
+lineList = []
+maze = []
 
-# fillout the map with a '+' pattern
-for x in range(n / 8, n * 7 / 8):
-    the_map[m / 2][x] = 1
-for y in range(m/8, m * 7 / 8):
-    the_map[y][n / 2] = 1
+with open("mapa.txt") as file:
+    if file:
+        for line in file:
+            lineList.append(line.strip())
+        
+    
+        del lineList[0]
+        del lineList[0]
+        maze = []            
 
-# randomly select start and finish locations from a list
-sf = []
-sf.append((0, 0, n - 1, m - 1))
-sf.append((0, m - 1, n - 1, 0))
-sf.append((n / 2 - 1, m / 2 - 1, n / 2 + 1, m / 2 + 1))
-sf.append((n / 2 - 1, m / 2 + 1, n / 2 + 1, m / 2 - 1))
-sf.append((n / 2 - 1, 0, n / 2 + 1, m - 1))
-sf.append((n / 2 + 1, m - 1, n / 2 - 1, 0))
-sf.append((0, m / 2 - 1, n - 1, m / 2 + 1))
-sf.append((n - 1, m / 2 + 1, 0, m / 2 - 1))
-(xA, yA, xB, yB) = random.choice(sf)
+        for i, line in enumerate(lineList):
+            aux = [0] * len(lineList[0])
+            for j, char in enumerate(line):
+                if char == ".":
+                    aux[j] = 0
+                if char == "*":
+                    aux[j] = 1
+                if char == ">":
+                    aux[j] = 2
+                    xA = i
+                    yA = j
+                if char == "x":
+                    aux[j] = 4
+                    xB = i
+                    yB = i
+            maze.insert(i, aux)
+                    
+    else:
+        print("File source is empty! :(")
+
+n = len(lineList[0]) # horizontal size of the map
+m = len(lineList) # vertical size of the map
 
 print 'Map size (X,Y): ', n, m
 print 'Start: ', xA, yA
 print 'Finish: ', xB, yB
 t = time.time()
-route = pathFind(the_map, n, m, dirs, dx, dy, xA, yA, xB, yB)
+route = pathFind(maze, n, m, dirs, dx, dy, xA, yA, xB, yB)
 print 'Time to generate the route (seconds): ', time.time() - t
 print 'Route:'
 print route
@@ -156,23 +167,23 @@ print route
 if len(route) > 0:
     x = xA
     y = yA
-    the_map[y][x] = 2
+    maze[y][x] = 2
     for i in range(len(route)):
         j = int(route[i])
         x += dx[j]
         y += dy[j]
-        the_map[y][x] = 3
-    the_map[y][x] = 4
+        maze[y][x] = 3
+    maze[y][x] = 4
 
 # display the map with the route added
 print 'Map:'
 for y in range(m):
     for x in range(n):
-        xy = the_map[y][x]
+        xy = maze[y][x]
         if xy == 0:
             print '.', # space
         elif xy == 1:
-            print 'O', # obstacle
+            print '*', # obstacle
         elif xy == 2:
             print 'S', # start
         elif xy == 3:
