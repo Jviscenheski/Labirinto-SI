@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import best_first as bf
+import best_first
 import a_star
 
 maxRows = 20
@@ -366,16 +366,19 @@ class Environment:
     Tcharam
 '''
 
-def astar(env, robot):
-    print('\nAlgoritmo A*\n')
+def pathfind(env, robot, alg):
+    print('\nAlgoritmo', alg, '\n')
     dirs = 8
     dx = [1, 1, 0, -1, -1, -1, 0, 1]
     dy = [0, 1, 1, 1, 0, -1, -1, -1]
     print('Map size (X,Y): ', env.nColumns, env.nRows)
     print('Start: ', env.start[1], env.start[0])
     print('Finish: ', env.end[1], env.end[0])
-    route = a_star.pathFind(env.matrix, robot, env.nColumns, env.nRows, dirs, dx, dy, env.start[1], env.start[0], env.end[1], env.end[0])
-
+    if alg == 'astar':
+        route = a_star.pathFind(env.matrix, robot, env.nColumns, env.nRows, dirs, dx, dy, env.start[1], env.start[0], env.end[1], env.end[0])
+    else:
+        route = best_first.pathFind(env.matrix, robot, env.nColumns, env.nRows, dirs, dx, dy, env.start[1], env.start[0], env.end[1], env.end[0])
+    
     if len(route) > 0:
         x = env.start[1]
         y = env.start[0]
@@ -391,6 +394,7 @@ def astar(env, robot):
 
 
 def main():
+    algoritmo = ''
     robot = Robot()
     env = Environment()
     env.scanStateFromFile(robot)
@@ -405,13 +409,15 @@ def main():
             env.moveRobot(robot.facing, robot)
             env.printState(robot)
         elif key == '1':
+            algoritmo = 'astar'
             env.scanStateFromFile(robot)
-            astar(env, robot)
+            pathfind(env, robot, algoritmo)
             env.printFinalState(robot)
             break
         elif key == '2':
+            algoritmo = 'bestFirst'
             env.scanStateFromFile(robot)
-            astar(env, robot) # colocar best first aqui.
+            pathfind(env, robot, algoritmo)
             env.printFinalState(robot)
             break
         elif key == 'q':

@@ -2,8 +2,6 @@
 
 from heapq import heappush, heappop # para ordem de prioridade
 import math
-import time
-import random
 
 turn = 10
 
@@ -156,8 +154,10 @@ def pathFind(the_map, robot, n, m, dirs, dx, dy, xA, yA, xB, yB):
     n0.updatePriority(xB, yB)
     heappush(pq[pqi], n0)
     open_nodes_map[yA][xA] = n0.priority # marca o node na lista de nodes não testados
+    operations = 0
 
     while len(pq[pqi]) > 0:
+        operations += 1 # só para contar o número de operações
         # pega o node com a prioridade mais alta da lista de nodes não testados
         n1 = pq[pqi][0]
         n0 = node(n1.xPos, n1.yPos, n1.distance, n1.priority, n1.direction)
@@ -173,6 +173,7 @@ def pathFind(the_map, robot, n, m, dirs, dx, dy, xA, yA, xB, yB):
             # gera o caminho do fim até o começo seguindo as direções
             path = ''
             print('Total cost =', n0.distance / 10)
+            print('Operations =', operations)
             robot.facingEnd = n0.direction
             robot.locX = n0.xPos
             robot.locY = n0.yPos
