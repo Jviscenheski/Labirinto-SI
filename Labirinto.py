@@ -13,6 +13,7 @@ class Robot:
         self.locX = "null"
         self.locY = "null"
         self.facing = "null"
+        self.facingEnd = "null"
 
     def __get__(self, instance, owner):
         return self.instance
@@ -47,23 +48,43 @@ class Robot:
             self.locX = self.locX - 1
 
     def printState(self):
-        print("Robot position: X =", self.locX,"Y =", self.locY, "facing:", end = "")
+        print("Robot position: X =", self.locX,"Y =", self.locY, "\nFacing:", end = "")
         if self.facing == 'NORTH':
-            print(" NORTH\n")
+            print(" NORTH")
         if self.facing == 'EAST':
-            print(" EAST\n")
+            print(" EAST")
         if self.facing == 'SOUTH':
-            print(" SOUTH\n")
+            print(" SOUTH")
         if self.facing == 'WEST':
-            print(" WEST\n")
+            print(" WEST")
         if self.facing == 'NORTHEAST':
-            print(" NORTHEAST\n")
+            print(" NORTHEAST")
         if self.facing == 'NORTHWEST':
-            print(" NORTHWEST\n")
+            print(" NORTHWEST")
         if self.facing == 'SOUTHEAST':
-            print(" SOUTHEAST\n")
+            print(" SOUTHEAST")
         if self.facing == 'SOUTHWEST':
-            print(" SOUTHWEST\n")
+            print(" SOUTHWEST")
+
+    def printFinalState(self):
+        print("Robot position: X =", self.locX,"Y =", self.locY, "\nFacing at the start:", end = "")
+        if self.facing == 'NORTH':
+            print(" NORTH")
+        if self.facing == 'EAST':
+            print(" EAST")
+        if self.facing == 'SOUTH':
+            print(" SOUTH")
+        if self.facing == 'WEST':
+            print(" WEST")
+        if self.facing == 'NORTHEAST':
+            print(" NORTHEAST")
+        if self.facing == 'NORTHWEST':
+            print(" NORTHWEST")
+        if self.facing == 'SOUTHEAST':
+            print(" SOUTHEAST")
+        if self.facing == 'SOUTHWEST':
+            print(" SOUTHWEST")
+        print('Facing at the end:', self.facingEnd)
 
 
 class Environment:
@@ -174,7 +195,7 @@ class Environment:
                 if self.matrix[r][c] == 0:
                     print("|   ", end = '')
                 if self.matrix[r][c] == 3:
-                    print("|(o)", end = '')
+                    print("| @ ", end = '')
                 if self.matrix[r][c] == 2:
                     if robot.facing == 'NORTH':
                         print("| ^ ", end = '')
@@ -201,6 +222,60 @@ class Environment:
             print("+")
 
         robot.printState()
+
+    def printFinalState(self, robot):
+        print("    ", end = '')
+        for i in range(self.nColumns):
+            print(str(i), end = '')
+            if i < 10:
+                print("   ", end = '')
+            else:
+                print("  ", end = '')
+        print('')
+        print('  ', end = '')
+        for i in range(self.nColumns):
+            print("+---", end = '')
+        print("+")
+        for r in range(self.nRows):
+            if r < 10: 
+                print('', str(r), end = '')
+            else:
+                print(str(r), end = '')
+            for c in range(self.nColumns):
+                if self.matrix[r][c] == 1:
+                    print("|***", end = '')
+                if self.matrix[r][c] == 4:
+                    print("| X ", end = '')
+                if self.matrix[r][c] == 0:
+                    print("|   ", end = '')
+                if self.matrix[r][c] == 3:
+                    print("| @ ", end = '')
+                if self.matrix[r][c] == 2:
+                    if robot.facing == 'NORTH':
+                        print("| ^ ", end = '')
+                    elif robot.facing == 'NORTHEAST':
+                        print("| / ", end = '')
+                    elif robot.facing == 'EAST':
+                        print("| > ", end = '')
+                    elif robot.facing == 'SOUTHEAST':
+                        print("| \\ ", end = '')
+                    elif robot.facing == 'SOUTH':
+                        print("| v ", end = '')
+                    elif robot.facing == 'SOUTHWEST':
+                        print("| % ", end = '')
+                    elif robot.facing == 'WEST':
+                        print("| < ", end = '')
+                    elif robot.facing == 'NORTHWEST':
+                        print("| # ", end = '')
+
+            print( "|", end = '' )
+            print('')
+            print("  ", end = '')
+            for i in range(self.nColumns):
+                print("+---", end = '')
+            print("+")
+
+        robot.printFinalState()
 
     def moveRobot(self, direction, robot):
         if (direction == 'NORTH') and (robot.facing == 'NORTH') and (self.matrix[robot.locX - 1][robot.locY] != 1) \
@@ -293,6 +368,7 @@ class Environment:
 '''
 
 def astar(env, robot):
+    print('\nAlgoritmo A*\n')
     dirs = 8
     dx = [1, 1, 0, -1, -1, -1, 0, 1]
     dy = [0, 1, 1, 1, 0, -1, -1, -1]
@@ -302,8 +378,6 @@ def astar(env, robot):
     t = time.time()
     route = a_star.pathFind(env.matrix, robot, env.nColumns, env.nRows, dirs, dx, dy, env.start[1], env.start[0], env.end[1], env.end[0])
     print('Time to generate the route (seconds): ', time.time() - t)
-    print('Route:')
-    print(route)
 
     if len(route) > 0:
         x = env.start[1]
@@ -316,23 +390,6 @@ def astar(env, robot):
             env.matrix[y][x] = 3
         env.matrix[y][x] = 4
 
-    # display the map with the route added
-    print('Map:')
-    for y in range(env.nRows):
-        for x in range(env.nColumns):
-            xy = env.matrix[y][x]
-            if xy == 0:
-                print('. ', end = '') # space
-            elif xy == 1:
-                print('* ', end = '') # obstacle
-            elif xy == 2:
-                print('> ', end = '') # start
-            elif xy == 3:
-                print('R ', end = '') # route
-            elif xy == 4:
-                print('X ', end = '')# finish
-        print('')
-
     input('\nPress Enter...')
 
 
@@ -340,22 +397,31 @@ def main():
     robot = Robot()
     env = Environment()
     env.scanStateFromFile(robot)
-    astar(env, robot)
-
     env.printState(robot)
-    #while True:
-    #    env.printState(robot)
-    #    key = input('W para ir para frente, A e D para rotacionar e Q para sair. ')
-    #    if key == 'a' or key == 'd':
-    #        env.rotateRobot(key, robot)
-    #    elif key == 'w':
-    #        env.moveRobot(robot.facing, robot)
-    #    elif key == 'q':
-    #        break
-    #    else:
-    #        print('Invalid key!')
-    #    key = ''
-    #bf.best_first(env)
 
+    while True:
+        key = input('Envie 1 para executar o A*, 2 para executar o BestFirst, W para ir para frente, A e D para rotacionar e Q para sair. ')
+        if key == 'a' or key == 'd':
+            env.rotateRobot(key, robot)
+            env.printState(robot)
+        elif key == 'w':
+            env.moveRobot(robot.facing, robot)
+            env.printState(robot)
+        elif key == '1':
+            env.scanStateFromFile(robot)
+            astar(env, robot)
+            env.printFinalState(robot)
+            break
+        elif key == '2':
+            env.scanStateFromFile(robot)
+            astar(env, robot) # colocar best first aqui.
+            env.printFinalState(robot)
+            break
+        elif key == 'q':
+            break
+        else:
+            print('Invalid key!')
+        key = ''
+    
 if __name__ == '__main__':
     main()

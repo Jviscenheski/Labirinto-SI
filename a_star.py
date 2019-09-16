@@ -172,6 +172,11 @@ def pathFind(the_map, robot, n, m, dirs, dx, dy, xA, yA, xB, yB):
         if x == xB and y == yB:
             # gera o caminho do fim até o começo seguindo as direções
             path = ''
+            print('Total cost =', n0.distance / 10)
+            robot.facingEnd = n0.direction
+            robot.locX = n0.xPos
+            robot.locY = n0.yPos
+
             while not (x == xA and y == yA):
                 j = dir_map[y][x]
                 c = str((j + dirs // 2) % dirs)
