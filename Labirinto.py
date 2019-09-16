@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import time
 import best_first as bf
 import a_star
 
@@ -375,9 +374,7 @@ def astar(env, robot):
     print('Map size (X,Y): ', env.nColumns, env.nRows)
     print('Start: ', env.start[1], env.start[0])
     print('Finish: ', env.end[1], env.end[0])
-    t = time.time()
     route = a_star.pathFind(env.matrix, robot, env.nColumns, env.nRows, dirs, dx, dy, env.start[1], env.start[0], env.end[1], env.end[0])
-    print('Time to generate the route (seconds): ', time.time() - t)
 
     if len(route) > 0:
         x = env.start[1]
