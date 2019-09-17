@@ -104,7 +104,7 @@ class Environment:
 
                 self.nColumns = len(lineList[0])
                 self.nRows = len(lineList)
-                self.matrix = [[0 for x in range(self.nRows)] for y in range(self.nColumns)]
+                self.matrix = [[0 for x in range(self.nColumns)] for y in range(self.nRows)]
                 lineIndex = 0
                 columnIndex = 0
 
@@ -285,35 +285,35 @@ class Environment:
             self.matrix[robot.locX][robot.locY] = 0
             self.matrix[robot.locX-1][robot.locY-1] = 2
             robot.move('NORTHWEST')
-        elif (direction == 'NORTHEAST') and (robot.facing == 'NORTHEAST') and (self.matrix[robot.locX - 1][robot.locY + 1] != 1) \
-                and (robot.locX > 0) and (robot.locY < self.nColumns):
+        elif (direction == 'NORTHEAST') and (robot.facing == 'NORTHEAST') and (robot.locY < self.nColumns - 1) \
+                and (robot.locX > 0) and (self.matrix[robot.locX - 1][robot.locY + 1] != 1):
             self.matrix[robot.locX][robot.locY] = 0
             self.matrix[robot.locX-1][robot.locY+1] = 2
             robot.move('NORTHEAST')
 
-        elif (direction == 'SOUTH') and (robot.facing == 'SOUTH') and (self.matrix[robot.locX+1][robot.locY] != 1) \
-                and (robot.locX < self.nRows):
+        elif (direction == 'SOUTH') and (robot.facing == 'SOUTH') and (robot.locX < self.nRows - 1) \
+                and (self.matrix[robot.locX+1][robot.locY] != 1):
             self.matrix[robot.locX][robot.locY] = 0
             self.matrix[robot.locX+1][robot.locY] = 2
             robot.move('SOUTH')
-        elif (direction == 'SOUTHWEST') and (robot.facing == 'SOUTHWEST') and (self.matrix[robot.locX + 1][robot.locY-1] != 1) \
-                and (robot.locX < self.nRows) and (robot.locY > 0):
+        elif (direction == 'SOUTHWEST') and (robot.facing == 'SOUTHWEST') and (robot.locX < self.nRows - 1) \
+                and (robot.locY > 0) and (self.matrix[robot.locX + 1][robot.locY-1] != 1):
             self.matrix[robot.locX][robot.locY] = 0
             self.matrix[robot.locX+1][robot.locY-1] = 2
             robot.move('SOUTHWEST')
-        elif (direction == 'SOUTHEAST') and (robot.facing == 'SOUTHEAST') and (self.matrix[robot.locX + 1][robot.locY+1] != 1) \
-                and (robot.locX < self.nRows) and (robot.locY < self.nColumns):
+        elif (direction == 'SOUTHEAST') and (robot.facing == 'SOUTHEAST') and (robot.locY < self.nColumns - 1) \
+                and (robot.locX < self.nRows - 1) and (self.matrix[robot.locX + 1][robot.locY+1] != 1):
             self.matrix[robot.locX][robot.locY] = 0
             self.matrix[robot.locX+1][robot.locY+1] = 2
             robot.move('SOUTHEAST')
 
-        elif (direction == 'EAST') and (robot.facing == 'EAST') and (self.matrix[robot.locX][robot.locY+1] != 1) \
-                and (robot.locY < self.nColumns):
+        elif (direction == 'EAST') and (robot.facing == 'EAST') and (robot.locY < self.nColumns - 1) \
+                and (self.matrix[robot.locX][robot.locY+1] != 1):
             self.matrix[robot.locX][robot.locY] = 0
             self.matrix[robot.locX][robot.locY+1] = 2
             robot.move('EAST')
-        elif (direction == 'WEST') and (robot.facing == 'WEST') and (self.matrix[robot.locX][robot.locY-1] != 1) \
-                and (robot.locY > 0):
+        elif (direction == 'WEST') and (robot.facing == 'WEST') and (robot.locY > 0) \
+                and (self.matrix[robot.locX][robot.locY-1] != 1):
             self.matrix[robot.locX][robot.locY] = 0
             self.matrix[robot.locX][robot.locY-1] = 2
             robot.move('WEST')
