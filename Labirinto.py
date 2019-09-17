@@ -3,9 +3,6 @@
 import best_first
 import a_star
 
-maxRows = 20
-maxColumns = 20
-
 class Robot:
 
     def __init__(self):
@@ -89,9 +86,9 @@ class Robot:
 class Environment:
 
     def __init__(self):
-        self.nRows = "null"
-        self.nColumns = "null"
-        self.matrix = [[0 for x in range(maxRows)] for y in range(maxColumns)]
+        self.nRows = 0
+        self.nColumns = 0
+        self.matrix = []
         self.start = (0,0)
         self.end = (0,0)
 
@@ -107,6 +104,7 @@ class Environment:
 
                 self.nColumns = len(lineList[0])
                 self.nRows = len(lineList)
+                self.matrix = [[0 for x in range(self.nRows)] for y in range(self.nColumns)]
                 lineIndex = 0
                 columnIndex = 0
 
