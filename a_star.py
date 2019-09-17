@@ -31,7 +31,7 @@ class node:
     def __lt__(self, other): # método de comparação para ordem de prioridade
         return self.priority < other.priority
     def updatePriority(self, xDest, yDest):
-        self.priority = self.estimate(xDest, yDest)
+        self.priority = self.distance + (self.estimate(xDest, yDest) * 10)
     def nextMove(self, dirs, d): # d é a direção do movimento
         parentFacing = self.direction # Grava a direção do node que gerou o atual.
 
@@ -134,7 +134,7 @@ class node:
     def estimate(self, xDest, yDest):
         xd = xDest - self.xPos
         yd = yDest - self.yPos
-        d = math.sqrt((xd ** 2) + (yd **2)) # distancia euclidiana
+        d = math.sqrt((xd ** 2) + (yd **2))
         return(d)
 
 def pathFind(the_map, robot, n, m, dirs, dx, dy, xA, yA, xB, yB):
